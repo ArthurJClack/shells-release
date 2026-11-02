@@ -1,0 +1,35 @@
+# Publishes a GitHub release from the build pushed to the `staging` branch.
+# The launcher reads releases/latest/download/manifest.json, so a release goes
+# live only once every file is attached (created as a draft, then published).
+name: publish
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: staging
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          V=$(jq -r .version manifest.json)
+          B=$(jq -r .build manifest.json)
+          TAG="v$V"
+          NOTES=NOTES.md; [ -f "$NOTES" ] || echo "SHELLS $V (build $B)" > "$NOTES"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" shells-*.zip shells-launcher-*.pck SHELLS-Setup-*.exe --clobber
+            gh release upload "$TAG" manifest.json --clobber
+          else
+            gh release create "$TAG" --target main --draft --title "SHELLS $V (build $B)" --notes-file "$NOTES" \
+              shells-*.zip shells-launcher-*.pck SHELLS-Setup-*.exe manifest.json
+            gh release edit "$TAG" --draft=false --latest
+          fi
+          echo "published $TAG"
