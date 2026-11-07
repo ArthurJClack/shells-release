@@ -1,0 +1,15 @@
+{
+ "version": "0.1.253",
+ "build": 253,
+ "game": {
+  "file": "shells-0.1.253.zip",
+  "sha256": "2a13cabc7b87137d730de81e02ac4a29a628257b5cfb3669afe7932957422633",
+  "size": 32743354
+ },
+ "launcher": {
+  "file": "shells-launcher-253.pck",
+  "sha256": "4222a3dabf14b861654ed049b917a0c5c368622b80dae4ea4fa218683b5c3690",
+  "build": 253
+ },
+ "notes": "SHELLS 0.1.253 (build 253)\n\n- v32 parts: keel/gorget frames, ram/blade legs, damper/split feet, sinew/quill arms, hook/duplex hands, hammer/halo/crest heads, supercap/flywheel hearts; peri\n"
+}
